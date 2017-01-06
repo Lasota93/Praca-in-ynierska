@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.example.tobiasz.projekt.przycinanie"
+    tools:showIn="@layout/activity_przycinanie"
+    android:orientation="vertical">
+
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/rgp"
+            android:layout_gravity="center">
+
+            <RadioButton
+                android:text="Góra"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/prb1"
+                android:layout_weight="1" />
+
+            <RadioButton
+                android:text="Dół"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/prb2"
+                android:layout_weight="1" />
+
+            <RadioButton
+                android:text="Lewo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/prb3"
+                android:layout_weight="1" />
+
+            <RadioButton
+                android:text="Prawo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/prb4"
+                android:layout_weight="1" />
+        </RadioGroup>
+
+    <Button
+        android:text="Przytnij"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="przytnijzdj"
+        android:id="@+id/button" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/lina"
+        android:gravity="center"
+        android:layout_gravity="center">
+
+        <com.example.tobiasz.projekt.DrawingView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:id="@+id/imageprzycinanie"/>
+    </LinearLayout>
+
+</LinearLayout>

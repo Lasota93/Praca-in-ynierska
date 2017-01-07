@@ -1,0 +1,26 @@
+<resources>>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
+    <style name="moje" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@android:color/darker_gray</item>
+        <item name="android:navigationBarColor">@color/common_signin_btn_default_background</item>
+        <item name="colorPrimaryDark">@color/common_signin_btn_default_background</item>
+        <item name="android:colorBackground">@color/background_material_dark</item>
+        <item name="android:textColorPrimaryInverse">@color/common_signin_btn_default_background
+        </item>
+        <item name="android:windowBackground">@android:color/darker_gray</item>
+        <item name="colorAccent">@color/common_signin_btn_default_background</item>
+        <item name="android:colorForeground">@android:color/holo_blue_bright</item>
+        <item name="android:statusBarColor">@color/common_signin_btn_default_background</item>
+        <item name="android:textColorPrimary">@android:color/background_light</item>
+        <item name="android:textColorSecondary">@color/common_signin_btn_default_background</item>
+        <item name="android:textColorSecondaryInverse">@color/common_signin_btn_default_background
+        </item>
+    </style>
+</resources>

@@ -77,6 +77,7 @@ public class panel extends AppCompatActivity implements NavigationView.OnNavigat
         myUri = ((tablicaMetod) this.getApplication()).getUri();
         dia_progress = new Dialog(this);
         dia_progress.setContentView(R.layout.dia_progress);
+        dia_progress.setCanceledOnTouchOutside(false);
         dia_start = new Dialog(this);
         dia_start.setContentView(R.layout.dia_start);
         if(!(((tablicaMetod) this.getApplication()).getW())) {
@@ -87,8 +88,8 @@ public class panel extends AppCompatActivity implements NavigationView.OnNavigat
                 @Override
                 public void onDismiss(DialogInterface dialog) {
                     dia_ok.setContentView(R.layout.dia_ok);
-                    dia_ok.show();
                     dia_ok.setCanceledOnTouchOutside(false);
+                    dia_ok.show();
                 }
             });
             (new start()).execute();
@@ -99,7 +100,7 @@ public class panel extends AppCompatActivity implements NavigationView.OnNavigat
     public void startowanie(View view){
         dia_ok.dismiss();
         ((tablicaMetod) this.getApplication()).setTabOrg(imgT);
-        (new wyswietl()).execute();
+        wyswietl();
     }
 
     private class start extends AsyncTask<Void, Void, Void> {
@@ -145,80 +146,57 @@ public class panel extends AppCompatActivity implements NavigationView.OnNavigat
                     imgT[j][k] = image.getPixel(k, j);
                 }
             }
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    img.post(new Runnable() {
-                        public void run() {
-                            dia_start.dismiss();
-                        }
-                    });
-                }
-            }).start();
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            dia_start.dismiss();
+            super.onPostExecute(aVoid);
         }
     }
 
-    private class wyswietl extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected Void doInBackground(Void... params) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    img.post(new Runnable() {
-                        public void run() {
-                            ramka.getLayoutParams().height = height;
-                            ramka.getLayoutParams().width = width;
-                            ramka.requestLayout();
-                            img.setImageBitmap(image);
-                            dia_progress.dismiss();
-                        }
-                    });
+    public void wyswietl() {
+        ramka.getLayoutParams().height = height;
+        ramka.getLayoutParams().width = width;
+        ramka.requestLayout();
+        img.setImageBitmap(image);
+        dia_progress.dismiss();
+    }
+
+    void nakładanie2() {
+        if(i == 1){
+            for (int j = 0; j < height; j++) {
+                for (int k = 0; k < width; k++) {
+                    imgT[j][k] = image.getPixel(k, j);
                 }
-            }).start();
-            return null;
+            }
+        }
+        if (i > 0) {
+            metody((i-1));
         }
     }
 
     private class maluj extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... params) {
-            new Thread(new Runnable() {
-
-                void nakładanie() {
-                    if(i == 1){
-                        for (int j = 0; j < height; j++) {
-                            for (int k = 0; k < width; k++) {
-                                imgT[j][k] = image.getPixel(k, j);
-                            }
-                        }
-                    }
-                    if (i > 0) {
-                        metody((i-1));
-                    }
+            nakładanie2();
+            int A=0;
+            int[] colors = new int[width*height];
+            for(int j=0; j<height; j++){
+                for(int k=0; k<width; k++){
+                    colors[A]=imgT[j][k];
+                    A++;
                 }
-
-                @Override
-                public void run() {
-                    img.post(new Runnable() {
-                        public void run() {
-                            nakładanie();
-                            int A=0;
-                            int[] colors = new int[width*height];
-                            for(int j=0; j<height; j++){
-                                for(int k=0; k<width; k++){
-                                    colors[A]=imgT[j][k];
-                                    A++;
-                                }
-                            }
-                            Log.d("Test6", "Dodawanie przekształcenia");
-                            image = Bitmap.createBitmap(colors, width, height, Bitmap.Config.ARGB_8888);
-                            (new wyswietl()).execute();
-                        }
-                    });
-                }
-            }).start();
+            }
+            image = Bitmap.createBitmap(colors, width, height, Bitmap.Config.ARGB_8888);
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            wyswietl();
+            super.onPostExecute(aVoid);
         }
 
         @Override
@@ -234,13 +212,10 @@ public class panel extends AppCompatActivity implements NavigationView.OnNavigat
     }
 
     private class zapis extends AsyncTask<Void, Void, Void> {
+        String imgSaved;
         @Override
         protected Void doInBackground(Void... params) {
-            new Thread(new Runnable() {
-
-                @Override
-                public void run() {
-                    String imgSaved = MediaStore.Images.Media.insertImage(
+                    imgSaved = MediaStore.Images.Media.insertImage(
                             getContentResolver(), setImg(imgT),
                             UUID.randomUUID().toString() + ".png", "drawing");
                     Log.d("Test6", "Start zapisywania");
@@ -249,12 +224,6 @@ public class panel extends AppCompatActivity implements NavigationView.OnNavigat
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    if (imgSaved != null) {
-                        dia_zapis.dismiss();
-                        Log.d("Test6", "Zapisywanie powiodło się");
-                    }
-                }
-            }).start();
             return null;
         }
 
@@ -262,7 +231,12 @@ public class panel extends AppCompatActivity implements NavigationView.OnNavigat
         protected void onPreExecute() {}
 
         @Override
-        protected void onPostExecute(Void aVoid) {}
+        protected void onPostExecute(Void aVoid) {
+            if (imgSaved != null) {
+                dia_zapis.dismiss();
+                Log.d("Test6", "Zapisywanie powiodło się");
+            }
+        }
     }
 
     private Bitmap setImg(int[][] tab){
@@ -507,6 +481,7 @@ public class panel extends AppCompatActivity implements NavigationView.OnNavigat
     public void zapis(View view) {
         dia_zapis = new Dialog(this);
         dia_zapis.setContentView(R.layout.dia_zapis);
+        dia_zapis.setCanceledOnTouchOutside(false);
         dia_zapis.show();
         metods = ((tablicaMetod) this.getApplication()).getTab();
         (new zapis()).execute();
@@ -651,40 +626,35 @@ public class panel extends AppCompatActivity implements NavigationView.OnNavigat
         (new malowanie()).execute();
     }
 
+    void nakładanie(int licznik) {
+        if (licznik >= 0) {
+            if (licznik != 0) {
+                nakładanie((licznik - 1));
+            }
+            metody(licznik);
+        }
+    }
+
     private class malowanie extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... params) {
-            new Thread(new Runnable() {
-
-                void nakładanie(int licznik) {
-                    if (licznik >= 0) {
-                        if (licznik != 0) {
-                            nakładanie((licznik - 1));
-                        }
-                        metody(licznik);
-                    }
+            nakładanie((i-1));
+            int A=0;
+            int[] colors = new int[width*height];
+            for(int j=0; j<height; j++){
+                for(int k=0; k<width; k++){
+                    colors[A]=imgT[j][k];
+                    A++;
                 }
-
-                @Override
-                public void run() {
-                    img.post(new Runnable() {
-                        public void run() {
-                            nakładanie((i-1));
-                            int A=0;
-                            int[] colors = new int[width*height];
-                            for(int j=0; j<height; j++){
-                                for(int k=0; k<width; k++){
-                                    colors[A]=imgT[j][k];
-                                    A++;
-                                }
-                            }
-                            image = Bitmap.createBitmap(colors, width, height, Bitmap.Config.ARGB_8888);
-                            (new wyswietl()).execute();
-                        }
-                    });
-                }
-            }).start();
+            }
+            image = Bitmap.createBitmap(colors, width, height, Bitmap.Config.ARGB_8888);
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            wyswietl();
+            super.onPostExecute(aVoid);
         }
 
         @Override

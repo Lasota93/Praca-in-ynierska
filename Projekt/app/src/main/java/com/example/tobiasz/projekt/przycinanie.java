@@ -4,28 +4,19 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.ParcelFileDescriptor;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-
-import java.io.FileDescriptor;
-import java.io.IOException;
 
 public class przycinanie extends AppCompatActivity {
     DrawingView dv;
@@ -123,7 +114,6 @@ public class przycinanie extends AppCompatActivity {
                 }
             }
         });
-        Log.d("Test3", "Start aktywności");
     }
 
     public void przytnijzdj(View view){
@@ -172,10 +162,8 @@ public class przycinanie extends AppCompatActivity {
                             d = new BitmapDrawable(getResources(), image);
                             metods[0] = new Metoda("Przycinanie góra", stosunek);
                             jakie[0] = 1;
-                            Log.d("Test3", "Przycinanie z góry");
                         }else {
                             dia.setContentView(R.layout.dia_blad);
-                            Log.d("Test3", "Błąd");
                             dia.show();
                         }
                     }else if(side==2){
@@ -191,10 +179,8 @@ public class przycinanie extends AppCompatActivity {
                             d = new BitmapDrawable(getResources(), image);
                             metods[1] = new Metoda("Przycinanie dół", stosunek);
                             jakie[1] = 1;
-                            Log.d("Test3", "Przycinanie z dołu");
                         }else {
                             dia.setContentView(R.layout.dia_blad);
-                            Log.d("Test3", "Błąd");
                             dia.show();
                         }
                     }else if(side==3){
@@ -211,10 +197,8 @@ public class przycinanie extends AppCompatActivity {
                             d = new BitmapDrawable(getResources(), image);
                             metods[2] = new Metoda("Przycinanie lewo", stosunek);
                             jakie[2] = 1;
-                            Log.d("Test3", "Przycinanie z lewej");
                         }else {
                             dia.setContentView(R.layout.dia_blad);
-                            Log.d("Test3", "Błąd");
                             dia.show();
                         }
                     }else if(side==4){
@@ -230,10 +214,8 @@ public class przycinanie extends AppCompatActivity {
                             d = new BitmapDrawable(getResources(), image);
                             metods[3] = new Metoda("Przycinanie prawo", stosunek);
                             jakie[3] = 1;
-                            Log.d("Test3", "Przycinanie z prawej");
                         }else {
                             dia.setContentView(R.layout.dia_blad);
-                            Log.d("Test3", "Błąd");
                             dia.show();
                         }
                     }
@@ -247,7 +229,6 @@ public class przycinanie extends AppCompatActivity {
                             lina.getLayoutParams().height = height;
                             lina.getLayoutParams().width = width;
                             lina.requestLayout();
-                            Log.d("Test3", "Przycinanie powiodło się");
                             dv.clear();
                         }
                     });

@@ -1,6 +1,7 @@
 package com.example.tobiasz.projekt;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -33,7 +34,6 @@ import android.widget.TextView;
 import java.io.File;
 import java.io.FileDescriptor;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
@@ -48,13 +48,15 @@ public class MainActivity extends AppCompatActivity {
     Uri selectedImageUri;
     final String dir =  Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)+ "/Folder/";
     File newdir = new File(dir);
+    Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        sprawdz();
+        dialog = new Dialog(this);
+        dialog.setContentView(R.layout.dia_inf);
         newdir.mkdirs();
         im = (ImageView) findViewById(R.id.imagemenu);
         im.setVisibility(View.GONE);
@@ -63,12 +65,22 @@ public class MainActivity extends AppCompatActivity {
         myText = (TextView) findViewById(R.id.textViewmenu );
         myText.setVisibility(View.GONE);
         ((tablicaMetod) this.getApplication()).clear();
-        Log.d("Test", "Start aktywności");
+        dialog.show();
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                sprawdz();
+            }
+        });
     }
 
     public void ustawienia(View view){
         Intent read_intent = new Intent(MainActivity.this, ustawienia.class);
         startActivity(read_intent);
+    }
+
+    public void info(View view){
+        dialog.dismiss();
     }
 
     public void sprawdz(){
@@ -169,7 +181,6 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_PICK);
-        Log.d("Test1", "Wybieranie zdjęcia z galerii");
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), SELECT_PICTURE);
     }
 
@@ -182,12 +193,6 @@ public class MainActivity extends AppCompatActivity {
                 im.setImageBitmap(image);
                 Log.d("Test1", "Pomyślnie wczytano zdjęcie z galerii");
             }
-        }
-        if (requestCode == TAKE_PHOTO_CODE) {
-            uriToBitmap(selectedImageUri);
-            skaluj();
-            im.setImageBitmap(image);
-            Log.d("Test2", "Pomyślnie wczytano zdjęcie zrobione aparatem");
         }
     }
 
@@ -282,22 +287,11 @@ public class MainActivity extends AppCompatActivity {
         startActivity(read_intent);
     }
 
-    private static final int TAKE_PHOTO_CODE = 2;
+    private static final int TAKE_PHOTO_CODE = 1;
     public void capturarFoto(View view) {
-        String file = dir+ DateFormat.format("yyyy-MM-dd_hhmmss", new Date()).toString()+".jpg";
-
-
-        File newfile = new File(file);
-        try {
-            newfile.createNewFile();
-        } catch (IOException e) {}
-
-        selectedImageUri = Uri.fromFile(newfile);
-
-        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, selectedImageUri);
-        Log.d("Test2", "Wykonywanie nowego zdjęcia");
+        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(cameraIntent, TAKE_PHOTO_CODE);
     }
+
 }
 

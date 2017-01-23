@@ -17,6 +17,7 @@ public class tablicaMetod extends Application {
     public void clear(){
         metods = null;
         metods = new Metoda[100];
+        tab = null;
         i = 0;
         uri = null;
         wznowienie = false;

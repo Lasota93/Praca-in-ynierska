@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -32,6 +33,7 @@ public class tekst_add extends AppCompatActivity {
     EditText et;
     Dialog dia_zapis;
     ColorPicker picker;
+    int color = Color.WHITE;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,13 +100,13 @@ public class tekst_add extends AppCompatActivity {
     public void colorB(View view){
         dia_zapis = new Dialog(this);
         dia_zapis.setContentView(R.layout.dia_color);
+        picker = (ColorPicker) dia_zapis.findViewById(R.id.picker);
+        picker.setOldCenterColor(color);
         dia_zapis.show();
     }
 
     public void colorW(View view){
-        picker = (ColorPicker) dia_zapis.findViewById(R.id.picker);
-        int color = picker.getColor();
-        picker.setOldCenterColor(picker.getColor());
+        color = picker.getColor();
         dv.setColorDV(color);
         dia_zapis.dismiss();
     }
